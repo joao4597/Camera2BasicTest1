@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Size mPreviewSize;
 
-    private HandlerThread mBackgroundThread;
+    private Camera2BackgroundThread mBackgroundThread;
     private Handler mBackgroundHandler;
 
     private ImageReader mImageReader;
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBackgroundThread() {
-        mBackgroundThread = new HandlerThread("CameraBackground");
+        mBackgroundThread = new Camera2BackgroundThread ("CameraBackground");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }

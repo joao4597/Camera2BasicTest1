@@ -48,54 +48,57 @@ public class ImageProcessingThread extends Thread {
                 e.printStackTrace();
             }
             Log.i("IMAGE_PROCESSING_THREAD", "THREAD STARTED, 3 seconds in");
-            //mImageReader.acquireNextImage();
-            FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mTextureView.getBitmap());
 
-            //FirebaseVisionImage image = FirebaseVisionImage.fromMediaImage(mImageReader.acquireNextImage(), FirebaseVisionImageMetadata.ROTATION_0);
-            FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+            try {
+                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mTextureView.getBitmap());
 
-            Task<FirebaseVisionText> result =
-                    detector.processImage(image)
-                            .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                                @Override
-                                public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                    // Task completed successfully
-                                    // ...
-                                    Log.i("IMAGE_PROCESSING_THREAD", "Image successfully processed");
-                                    String resultText = firebaseVisionText.getText();
-                                    for (FirebaseVisionText.TextBlock block: firebaseVisionText.getTextBlocks()) {
-                                        String blockText = block.getText();
-                                        Log.i("DETECTED_TEXT", blockText);
-                                        Float blockConfidence = block.getConfidence();
-                                        List<RecognizedLanguage> blockLanguages = block.getRecognizedLanguages();
-                                        Point[] blockCornerPoints = block.getCornerPoints();
-                                        Rect blockFrame = block.getBoundingBox();
-                                        for (FirebaseVisionText.Line line: block.getLines()) {
-                                            String lineText = line.getText();
-                                            Float lineConfidence = line.getConfidence();
-                                            List<RecognizedLanguage> lineLanguages = line.getRecognizedLanguages();
-                                            Point[] lineCornerPoints = line.getCornerPoints();
-                                            Rect lineFrame = line.getBoundingBox();
-                                            for (FirebaseVisionText.Element element: line.getElements()) {
-                                                String elementText = element.getText();
-                                                Float elementConfidence = element.getConfidence();
-                                                List<RecognizedLanguage> elementLanguages = element.getRecognizedLanguages();
-                                                Point[] elementCornerPoints = element.getCornerPoints();
-                                                Rect elementFrame = element.getBoundingBox();
+                FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+
+                Task<FirebaseVisionText> result =
+                        detector.processImage(image)
+                                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                                    @Override
+                                    public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                        // Task completed successfully
+                                        // ...
+                                        Log.i("IMAGE_PROCESSING_THREAD", "Image successfully processed");
+                                        String resultText = firebaseVisionText.getText();
+                                        for (FirebaseVisionText.TextBlock block: firebaseVisionText.getTextBlocks()) {
+                                            String blockText = block.getText();
+                                            Log.i("DETECTED_TEXT", blockText);
+                                            Float blockConfidence = block.getConfidence();
+                                            List<RecognizedLanguage> blockLanguages = block.getRecognizedLanguages();
+                                            Point[] blockCornerPoints = block.getCornerPoints();
+                                            Rect blockFrame = block.getBoundingBox();
+                                            for (FirebaseVisionText.Line line: block.getLines()) {
+                                                String lineText = line.getText();
+                                                Float lineConfidence = line.getConfidence();
+                                                List<RecognizedLanguage> lineLanguages = line.getRecognizedLanguages();
+                                                Point[] lineCornerPoints = line.getCornerPoints();
+                                                Rect lineFrame = line.getBoundingBox();
+                                                for (FirebaseVisionText.Element element: line.getElements()) {
+                                                    String elementText = element.getText();
+                                                    Float elementConfidence = element.getConfidence();
+                                                    List<RecognizedLanguage> elementLanguages = element.getRecognizedLanguages();
+                                                    Point[] elementCornerPoints = element.getCornerPoints();
+                                                    Rect elementFrame = element.getBoundingBox();
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            })
-                            .addOnFailureListener(
-                                    new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            // Task failed with an exception
-                                            // ...
-                                            Log.i("IMAGE_PROCESSING_THREAD", "Image processing failed");
-                                        }
-                                    });
+                                })
+                                .addOnFailureListener(
+                                        new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Task failed with an exception
+                                                // ...
+                                                Log.i("IMAGE_PROCESSING_THREAD", "Image processing failed");
+                                            }
+                                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
